@@ -1,0 +1,14 @@
+php:
+	timezone: europe/prague
+
+services:
+	userModel: h4kuna\Acl\Test\UserModel
+	- h4kuna\Acl\Test\Permission
+
+session:
+	savePath: '%tempDir%/sessions'
+	autoStart: false
+	expiration: '1 day'
+
+extensions:
+	cms: h4kuna\Acl\DI\AclExtension
