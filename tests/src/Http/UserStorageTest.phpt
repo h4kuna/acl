@@ -1,12 +1,12 @@
 <?php
 
-namespace h4kuna\Acl\Core\Http;
+namespace h4kuna\Acl\Http;
 
-use h4kuna\Acl\Core\Security,
+use h4kuna\Acl\Security,
 	Nette,
 	Tester\Assert;
 
-$container = require __DIR__ . '/../../../bootstrap.php';
+$container = require __DIR__ . '/../../bootstrap.php';
 
 class UserStorageTest extends \Tester\TestCase
 {

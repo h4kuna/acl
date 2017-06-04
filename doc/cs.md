@@ -29,10 +29,10 @@ aclExtension:
 ```
 
 ## Authenticator
-K dispozici je [AuthenticatorFacadeAbstract](../src/Core/Security/AuthenticatorFacadeAbstract.php) bude stačit když jej podědíte a doplníte metody které nejsou naimplementované z rozhraní [AuthenticatorFacadeInterface](../src/Core/Security/AuthenticatorFacadeInterface.php). Můžeme se nechat inspirovat [UserModel](../tests/libs/UserModel.php) třídou pro testování. Novou třídu registrujde jako službu v neonu.
+K dispozici je [AuthenticatorFacadeAbstract](../src/Security/AuthenticatorFacadeAbstract.php) bude stačit když jej podědíte a doplníte metody které nejsou naimplementované z rozhraní [AuthenticatorFacadeInterface](../src/Security/AuthenticatorFacadeInterface.php). Můžeme se nechat inspirovat [UserModel](../tests/libs/UserModel.php) třídou pro testování. Novou třídu registrujde jako službu v neonu.
 
 ## Authorizator
-Implementujte rozhraní [PermissionInterface](../src/Core/Security/PermissionInterface.php), kde si určíte která id uživatelů jsou implicitně povolená na všechno pokud nechcete stačí vracet FALSE.
+Implementujte rozhraní [PermissionInterface](../src/Security/PermissionInterface.php), kde si určíte která id uživatelů jsou implicitně povolená na všechno pokud nechcete stačí vracet FALSE.
 
 V aplikaci používáte ověřování pomocí resource a privilege a můžete si doplnit parametry například id souboru a ověřit si zda uživatel na něj má právo.
 

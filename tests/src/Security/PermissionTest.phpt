@@ -1,12 +1,12 @@
 <?php
 
-namespace h4kuna\Acl\Core\Security;
+namespace h4kuna\Acl\Security;
 
-namespace h4kuna\Acl\Core\Security;
+namespace h4kuna\Acl\Security;
 
 use Tester\Assert;
 
-$container = require __DIR__ . '/../../../bootstrap.php';
+$container = require __DIR__ . '/../../bootstrap.php';
 
 class PermissionTest extends \Tester\TestCase
 {

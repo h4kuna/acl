@@ -1,8 +1,8 @@
 <?php
 
-namespace h4kuna\Acl\Core\Http;
+namespace h4kuna\Acl\Http;
 
-use h4kuna\Acl\Core\Security,
+use h4kuna\Acl\Security,
 	Nette\Http AS NHttp;
 
 class UserStorage extends \Nette\Http\UserStorage

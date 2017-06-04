@@ -1,6 +1,6 @@
 <?php
 
-namespace h4kuna\Acl\Core\Security;
+namespace h4kuna\Acl\Security;
 
 abstract class AuthenticatorFacadeAbstract implements AuthenticatorFacadeInterface
 {

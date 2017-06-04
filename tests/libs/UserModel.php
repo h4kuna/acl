@@ -2,7 +2,7 @@
 
 namespace h4kuna\Acl\Test;
 
-use h4kuna\Acl\Core\Security;
+use h4kuna\Acl\Security;
 
 class UserModel extends Security\AuthenticatorFacadeAbstract
 {

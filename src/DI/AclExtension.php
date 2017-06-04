@@ -2,8 +2,8 @@
 
 namespace h4kuna\Acl\DI;
 
-use h4kuna\Acl\Core\Http,
-	h4kuna\Acl\Core\Security,
+use h4kuna\Acl\Http,
+	h4kuna\Acl\Security,
 	Nette\DI as NDI;
 
 class AclExtension extends NDI\CompilerExtension

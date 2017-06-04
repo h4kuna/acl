@@ -1,12 +1,12 @@
 <?php
 
-namespace h4kuna\Acl\Core\Security;
+namespace h4kuna\Acl\Security;
 
 use h4kuna\Acl\Test,
-	h4kuna\Acl\Core\Http,
+	h4kuna\Acl\Http,
 	Tester\Assert;
 
-$container = require __DIR__ . '/../../../bootstrap.php';
+$container = require __DIR__ . '/../../bootstrap.php';
 
 class SynchronizeIdentityTest extends \Tester\TestCase
 {

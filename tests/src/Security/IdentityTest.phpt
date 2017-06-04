@@ -1,8 +1,8 @@
 <?php
 
-namespace h4kuna\Acl\Core\Security;
+namespace h4kuna\Acl\Security;
 
-$container = require __DIR__ . '/../../../bootstrap.php';
+$container = require __DIR__ . '/../../bootstrap.php';
 
 use Tester\Assert;
 
@@ -11,7 +11,7 @@ class IdentityTest extends \Tester\TestCase
 
 	public function testUnserialize()
 	{
-		$serialize = 'C:33:"h4kuna\Acl\Core\Security\Identity":4:{i:1;}';
+		$serialize = 'C:28:"h4kuna\Acl\Security\Identity":4:{i:1;}';
 		$identity = unserialize($serialize);
 		Assert::same(1, $identity->getId());
 		Assert::same(NULL, $identity->getData());
@@ -27,11 +27,11 @@ class IdentityTest extends \Tester\TestCase
 		};
 		Assert::same(1, $identity->getId());
 		Assert::same('Joe', $identity->name);
-		Assert::same('C:33:"h4kuna\Acl\Core\Security\Identity":4:{i:1;}', serialize($identity));
+		Assert::same('C:28:"h4kuna\Acl\Security\Identity":4:{i:1;}', serialize($identity));
 		Assert::same(0, $counter->count);
 
 		$identity->name = 'Doe';
-		Assert::same('C:33:"h4kuna\Acl\Core\Security\Identity":4:{i:1;}', serialize($identity));
+		Assert::same('C:28:"h4kuna\Acl\Security\Identity":4:{i:1;}', serialize($identity));
 		Assert::same(1, $counter->count);
 	}
 
