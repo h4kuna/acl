@@ -10,12 +10,16 @@ class AclExtension extends NDI\CompilerExtension
 {
 
 	public $defaults = [
-		'storage' => '@cache.storage'
+		'storage' => '@cache.storage',
+		'debugMode' => '%debugMode%'
 	];
+
+	/** @var array */
+	private $expandConfig;
 
 	public function loadConfiguration()
 	{
-		$config = $this->getConfig($this->defaults);
+		$this->expandConfig = $this->getConfig($this->defaults);
 		$builder = $this->getContainerBuilder();
 
 		// authenticator
@@ -24,7 +28,7 @@ class AclExtension extends NDI\CompilerExtension
 
 		// synchronizeIdentity
 		$synchronizeIdentity = $builder->addDefinition($this->prefix('synchronizeIdentity'))
-			->setClass(Security\SynchronizeIdentity::class, [$config['storage']]);
+			->setClass(Security\SynchronizeIdentity::class, [$this->expandConfig['storage']]);
 
 		$userStorage = $builder->getDefinition('security.userStorage')
 			->setClass(Http\UserStorage::class, [$builder->getDefinition('session.session'), $synchronizeIdentity]);
@@ -48,6 +52,17 @@ class AclExtension extends NDI\CompilerExtension
 
 			$user = $builder->getDefinition('security.user');
 			$user->getFactory()->arguments[2] = $authorizator;
+		}
+
+		$builder->addDefinition($this->prefix('panel'))
+			->setClass('h4kuna\Acl\Debug\Panel');
+	}
+
+	public function afterCompile(\Nette\PhpGenerator\ClassType $class)
+	{
+		$initialize = $class->getMethod('initialize');
+		if (class_exists('Tracy\Debugger')) {
+			$initialize->addBody('if ($this->parameters[\'debugMode\'] && ?) { Tracy\Debugger::getBar()->addPanel($this->getService(?));}', [$this->expandConfig['debugMode'], $this->prefix('panel')]);
 		}
 	}
 
