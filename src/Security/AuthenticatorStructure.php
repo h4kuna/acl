@@ -2,6 +2,8 @@
 
 namespace h4kuna\Acl\Security;
 
+use h4kuna\Acl;
+
 class AuthenticatorStructure implements \Serializable
 {
 
@@ -17,8 +19,15 @@ class AuthenticatorStructure implements \Serializable
 	/** @var mixed */
 	private $blocked = TRUE;
 
+	/**
+	 * @throws Acl\IdentityNotFoundException
+	 */
 	public function __construct($id)
 	{
+		if (!$id) {
+			throw new Acl\IdentityNotFoundException();
+		}
+
 		$this->id = $id;
 	}
 

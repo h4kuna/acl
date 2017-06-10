@@ -21,7 +21,7 @@ class IdentityTest extends \Tester\TestCase
 	{
 		$counter = new \h4kuna\Acl\Test\Counter();
 		$structure = (new AuthenticatorStructure(1))->setData(['name' => 'Joe']);
-		$identity = (new Identity(1))->setData($structure);
+		$identity = (new Identity($structure));
 		$identity->onChangeIdentity[] = function() use ($counter) {
 			++$counter->count;
 		};

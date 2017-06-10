@@ -47,7 +47,6 @@ class Authenticator
 	{
 		$rawData = $this->authenticatorFacade->fetchUserByUsername($username);
 		$data = $this->authenticatorFacade->createAuthenticatorStructure($rawData);
-		$this->checkIdentity($data);
 		if (!Passwords::verify($password, $data->getPassword())) {
 			throw new Acl\InvalidPasswordException();
 		}
@@ -56,25 +55,9 @@ class Authenticator
 
 	protected function login(AuthenticatorStructure $data, $method)
 	{
-		$this->checkIdentity($data);
-		if ($data->isBlocked()) {
-			throw new Acl\IdentityIsBlockedException($data->getId());
-		}
-		$identity = $this->identityFactory->create($data);
-		$this->user->login($identity);
+		$this->user->login($this->identityFactory->create($data));
 		$this->authenticatorFacade->loginSuccess($this->user, $method);
 		return $this->user;
-	}
-
-	/**
-	 * @param AuthenticatorStructure $data
-	 * @throws Acl\IdentityNotFoundException
-	 */
-	protected function checkIdentity(AuthenticatorStructure $data)
-	{
-		if (!$data->getId()) {
-			throw new Acl\IdentityNotFoundException();
-		}
 	}
 
 }

@@ -26,7 +26,7 @@ class UserStorageTest extends \Tester\TestCase
 	public function testBasic()
 	{
 		$userStorage = new UserStorage($this->session, $this->synchronizeIdentity);
-		$userStorage->setIdentity(new Security\Identity(1)); // unserialize
+		$userStorage->setIdentity(new Security\Identity(new Security\AuthenticatorStructure(1))); // unserialize
 		Assert::same('Joe', $userStorage->getIdentity()->name);
 	}
 

@@ -44,9 +44,6 @@ class UserModel extends Security\AuthenticatorFacadeAbstract
 
 	public function fetchUserByUsername($username)
 	{
-		if ($username === 'exception') {
-			throw new MyTestException();
-		}
 		foreach ($this->users as $data) {
 			if ($data['name'] === $username) {
 				return $data;

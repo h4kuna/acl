@@ -48,7 +48,7 @@ class SynchronizeIdentityTest extends \Tester\TestCase
 		$identity = $user->getIdentity();
 		$this->userModel->blockUser($userId);
 		$this->synchronizeIdentity->forceReloadUserIdentity($userId);
-		$identity->setData(NULL);
+		$identity->setData(new AuthenticatorStructure(1)); // @hack for test
 		$user->getStorage()->setIdentity($identity);
 
 		Assert::type(Identity::class, $user->getIdentity());

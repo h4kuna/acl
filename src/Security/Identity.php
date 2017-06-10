@@ -24,9 +24,10 @@ class Identity implements Nette\Security\IIdentity, \Serializable
 	/** @var array|NULL */
 	private $data;
 
-	public function __construct($id)
+	public function __construct(AuthenticatorStructure $data)
 	{
-		$this->id = $id;
+		$this->id = $data->getId();
+		$this->setData($data);
 	}
 
 	/**
@@ -75,9 +76,9 @@ class Identity implements Nette\Security\IIdentity, \Serializable
 	 * @param AuthenticatorStructure|NULL $data
 	 * @return self
 	 */
-	public function setData(AuthenticatorStructure $data = NULL)
+	public function setData(AuthenticatorStructure $data)
 	{
-		$this->data = $data ? $data->getData() : NULL;
+		$this->data = $data->getData() ?: NULL;
 		return $this;
 	}
 
