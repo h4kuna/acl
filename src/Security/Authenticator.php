@@ -8,20 +8,20 @@ use h4kuna\Acl,
 class Authenticator
 {
 
-	/** @var IdentityFactory */
-	protected $identityFactory;
-
-	/** @var AuthenticatorFacadeInterface */
-	protected $authenticatorFacade;
-
 	/** @var User */
 	protected $user;
 
-	public function __construct(IdentityFactory $identityFactory, AuthenticatorFacadeInterface $authenticatorFacade, User $user)
+	/** @var AuthenticatorFacade */
+	protected $authenticatorFacade;
+
+	/** @var IdentityFactory */
+	protected $identityFactory;
+
+	public function __construct(User $user, AuthenticatorFacade $authenticatorFacade, IdentityFactory $identityFactory)
 	{
-		$this->identityFactory = $identityFactory;
-		$this->authenticatorFacade = $authenticatorFacade;
 		$this->user = $user;
+		$this->authenticatorFacade = $authenticatorFacade;
+		$this->identityFactory = $identityFactory;
 	}
 
 	/**
@@ -32,7 +32,9 @@ class Authenticator
 	 */
 	public function loginById($id)
 	{
-		return $this->login($this->authenticatorFacade->createAuthenticatorStructureById($id), 'id');
+		$data = $this->authenticatorFacade->createAuthenticatorStructureById($id);
+		$this->checkAuthenticatorStructure($data);
+		return $this->login($data, 'id');
 	}
 
 	/**
@@ -45,19 +47,32 @@ class Authenticator
 	 */
 	public function loginByPassword($username, $password)
 	{
-		$rawData = $this->authenticatorFacade->fetchUserByUsername($username);
-		$data = $this->authenticatorFacade->createAuthenticatorStructure($rawData);
-		if (!Passwords::verify($password, $data->getPassword())) {
+		$data = $this->authenticatorFacade->createAuthenticatorStructureByUsername($username);
+		$this->checkAuthenticatorStructure($data);
+		if (!$this->verifyPassword($password, $data->password)) {
 			throw new Acl\InvalidPasswordException();
 		}
 		return $this->login($data, 'password');
 	}
 
+	protected function checkAuthenticatorStructure(AuthenticatorStructure $data = null)
+	{
+		if ($data === null || !$data->id) {
+			throw new Acl\IdentityNotFoundException;
+		} elseif ($data->blocked === true) {
+			throw new Acl\IdentityIsBlockedException;
+		}
+	}
+
 	protected function login(AuthenticatorStructure $data, $method)
 	{
-		$this->user->login($this->identityFactory->create($data));
+		$this->user->login($this->identityFactory->create($data->id, $data->data));
 		$this->authenticatorFacade->loginSuccess($this->user, $method);
 		return $this->user;
 	}
 
+	protected function verifyPassword($password, $storedPassword)
+	{
+		return Passwords::verify($password, $storedPassword);
+	}
 }

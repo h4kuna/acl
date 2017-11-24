@@ -2,7 +2,7 @@
 
 namespace h4kuna\Acl\Security;
 
-interface PermissionInterface
+interface Permission
 {
 
 	/**

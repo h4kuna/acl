@@ -2,8 +2,8 @@
 
 namespace h4kuna\Acl\Debug;
 
-use h4kuna\Acl\Security,
-	Tracy;
+use h4kuna\Acl\Security;
+use Tracy;
 
 class Panel implements Tracy\IBarPanel
 {
@@ -11,10 +11,10 @@ class Panel implements Tracy\IBarPanel
 	/** @var Security\Authenticator */
 	private $authenticator;
 
-	/** @var Security\PermissionInterface|NULL */
+	/** @var Security\Permission|NULL */
 	private $permission;
 
-	public function __construct(Security\Authenticator $authenticator, Security\PermissionInterface $permission = NULL)
+	public function __construct(Security\Authenticator $authenticator, Security\Permission $permission = null)
 	{
 		$this->authenticator = $authenticator;
 		$this->permission = $permission;
@@ -31,7 +31,6 @@ class Panel implements Tracy\IBarPanel
 		$authorizatorMethods = $this->getAuthorizatorMethods();
 
 		ob_start(function () {
-
 		});
 		require __DIR__ . '/panel.phtml';
 		return ob_get_clean();
@@ -44,8 +43,8 @@ class Panel implements Tracy\IBarPanel
 
 	private function getAuthorizatorMethods()
 	{
-		if ($this->permission === NULL) {
-			return NULL;
+		if ($this->permission === null) {
+			return null;
 		}
 		$methods = $this->filterMethods(new \ReflectionClass($this->permission), 'resource');
 		foreach ($methods as &$method) {
@@ -69,7 +68,7 @@ class Panel implements Tracy\IBarPanel
 				'line' => $method->getStartLine(),
 				'prototype' => $method->name . $this->filterParameters($method->getParameters()),
 				'sufix' => lcfirst($find[1]),
-				'parameters' => $method->getParameters()
+				'parameters' => $method->getParameters(),
 			];
 		}
 

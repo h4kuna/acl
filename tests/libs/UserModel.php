@@ -4,7 +4,7 @@ namespace h4kuna\Acl\Test;
 
 use h4kuna\Acl\Security;
 
-class UserModel extends Security\AuthenticatorFacadeAbstract
+class UserModel implements Security\AuthenticatorFacade
 {
 
 	private $users = [
@@ -12,62 +12,38 @@ class UserModel extends Security\AuthenticatorFacadeAbstract
 			'id' => 1,
 			'name' => 'Joe',
 			'surname' => 'Doe',
-			'block' => FALSE,
+			'block' => false,
 			'password' => '$2y$10$79DxQGPherAnaAubRPuLk.p3U6.lMhxIkQlIkQHAEKfNLYd4slhiO', // 123456
-			'login_count' => 1
+			'login_count' => 1,
 		],
 		2 => [
 			'id' => 2,
 			'name' => 'alfred',
 			'surname' => 'green',
-			'block' => TRUE,
+			'block' => true,
 			'password' => '$2y$10$75NNlndNLdbalnEfN1MSF.Eh7uyb7/mPKkGb2Tbh.F44P2EkLCZFK', // password
-			'login_count' => 0
+			'login_count' => 0,
 		],
 		3 => [
 			'id' => 3,
 			'name' => 'Masrer',
 			'surname' => 'Blaster',
-			'block' => FALSE,
+			'block' => false,
 			'password' => '$2y$10$79DxQGPherAnaAubRPuLk.p3U6.lMhxIkQlIkQHAEKfNLYd4slhiO', // 123456
-			'login_count' => 0
+			'login_count' => 0,
 		],
 	];
 
-	public function fetchUserById($id)
+	public function createAuthenticatorStructureByUsername($username)
 	{
-		if (isset($this->users[$id])) {
-			return $this->users[$id];
-		}
-		return NULL;
+		$data = $this->fetch('name', $username);
+		return $this->createAuthenticatorStructure($data);
 	}
 
-	public function fetchUserByUsername($username)
+	public function createAuthenticatorStructureById($userId)
 	{
-		foreach ($this->users as $data) {
-			if ($data['name'] === $username) {
-				return $data;
-			}
-		}
-		return NULL;
-	}
-
-	public function createAuthenticatorStructure($data)
-	{
-		if (!$data) {
-			return new Security\AuthenticatorStructure(0);
-		}
-		$struct = new Security\AuthenticatorStructure($data['id']);
-
-		if (isset($data['password'])) {
-			$struct->setPassword($data['password']);
-		}
-
-		$struct->setBlocked($data['block']);
-		unset($data['password'], $data['block'], $data['id']);
-
-		$struct->setData($data);
-		return $struct;
+		$data = $this->fetchUserById($userId);
+		return $this->createAuthenticatorStructure($data);
 	}
 
 	public function loginSuccess(Security\User $user, $method)
@@ -77,11 +53,43 @@ class UserModel extends Security\AuthenticatorFacadeAbstract
 		}
 	}
 
+	public function createGlobalDataById($userId)
+	{
+		$data = $this->fetchUserById($userId);
+		if (!$data) {
+			return null;
+		}
+		unset($data['password'], $data['login_count']);
+		return new Security\GlobalData($data);
+	}
+
 	/* NOT IN INTERFACE ***************************************************** */
 
 	public function blockUser($userId)
 	{
-		$this->users[$userId]['block'] = TRUE;
+		$this->users[$userId]['block'] = true;
 	}
 
+	public function fetchUserById($userId)
+	{
+		return $this->fetch('id', $userId);
+	}
+
+	private function createAuthenticatorStructure($data)
+	{
+		if (!$data) {
+			return new Security\AuthenticatorStructure(0);
+		}
+		return new Security\AuthenticatorStructure($data['id'], $data['block'], $data['password']);
+	}
+
+	private function fetch($column, $value)
+	{
+		foreach ($this->users as $id => $columns) {
+			if ($columns[$column] == $value) {
+				return $columns;
+			}
+		}
+		return [];
+	}
 }

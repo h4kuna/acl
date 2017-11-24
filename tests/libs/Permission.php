@@ -4,7 +4,7 @@ namespace h4kuna\Acl\Test;
 
 use h4kuna\Acl\Security;
 
-class Permission implements \h4kuna\Acl\Security\PermissionInterface
+class Permission implements \h4kuna\Acl\Security\Permission
 {
 
 	public function isGod(Security\User $user)

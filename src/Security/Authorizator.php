@@ -3,17 +3,18 @@
 namespace h4kuna\Acl\Security;
 
 use h4kuna\Acl;
+use Nette\Security\IAuthorizator;
 
-class Authorizator implements \Nette\Security\IAuthorizator
+class Authorizator implements IAuthorizator
 {
 
-	/** @var PermissionInterface */
+	/** @var Permission */
 	private $permission;
 
 	/** @var bool[] */
 	private $methods = [];
 
-	public function __construct(PermissionInterface $permission)
+	public function __construct(Permission $permission)
 	{
 		$this->permission = $permission;
 	}
@@ -35,9 +36,8 @@ class Authorizator implements \Nette\Security\IAuthorizator
 			$this->methods[$resource] = $method;
 		}
 
-
 		if ($this->permission->isGod($user)) {
-			return TRUE;
+			return true;
 		}
 
 		return $this->permission->{$this->methods[$resource]}($user, $privilege, ...$arguments);

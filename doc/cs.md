@@ -12,7 +12,7 @@ S čím knihovna pomůže
 ------------------
 - authenticator - připraveny jsou metody pro příhlášení pomocí id a pomocí hesla
 - authorizator - stačí naimplementovat PermissionInterface a zaregistrovat jako službu
-- synchronizace identity - do session se ukládá pouze id a ostatní data do jiné storage
+- global identity - do session se ukládá pouze id a ostatní data do jiné storage
 - umožňuje cílené obnovení identit všem uživatelům (vyprázdněním storage), nebo jen jednotlivcům
 
 # Jak integrovat
@@ -30,10 +30,10 @@ aclExtension:
 ```
 
 ## Authenticator
-K dispozici je [AuthenticatorFacadeAbstract](../src/Security/AuthenticatorFacadeAbstract.php) bude stačit když jej podědíte a doplníte metody které nejsou naimplementované z rozhraní [AuthenticatorFacadeInterface](../src/Security/AuthenticatorFacadeInterface.php). Můžeme se nechat inspirovat [UserModel](../tests/libs/UserModel.php) třídou pro testování. Novou třídu registrujde jako službu v neonu.
+K dispozici je [AuthenticatorFacade](../src/Security/AuthenticatorFacade.php) bude stačit když jej implementujete. Můžeme se nechat inspirovat [UserModel](../tests/libs/UserModel.php) třídou pro testování. Novou třídu registrujde jako službu v neonu.
 
 ## Authorizator
-Implementujte rozhraní [PermissionInterface](../src/Security/PermissionInterface.php) methoda **isGod()**, kde si určíte která id uživatelů jsou implicitně povolená na všechno pokud nechcete stačí vracet FALSE.
+Implementujte rozhraní [Permission](../src/Security/Permission.php) methoda **isGod()**, kde si určíte která id uživatelů jsou implicitně povolená na všechno pokud nechcete stačí vracet FALSE.
 
 V aplikaci používáte ověřování pomocí resource a privilege a můžete si doplnit parametry například id souboru a ověřit si zda uživatel na něj má právo.
 
@@ -46,8 +46,8 @@ $user->isAllowed('file', 'delete', 2, 'foo', 'bar');
 
 Vždy když si takto něco napíšete aplikace vyhodí vyjímku a řekně co máte doplnit do třídy za metodu. Pokud potřebujete vlastní třídu User, tak poděďte tu co je zde v rozšíření. V debug baru se objeví nová ikonka, která vám napoví jaké jsou možnosti jsou autorizace.
 
-## UserStorage
-Přijímá dvě uložiště, jedno nativní z nette, a druhé jde ovlivnit přes tento doplněk a do tohoto se právě ukládají všechna data, tím odpadnou problémy s přihlášením na pc, mobilu, tabletu, notebooku a jinde, uživatel si něco změní v mobilu a hned se to projeví v ostatních zařízeních.
+## GlobalIdentity
+Globální uložiště nezávislé na session a servery.
 
-## SynchronizeIdentity
-Tato třída řeší odhlášení všech popřípadě jednotlivců. Pokud na webu někomu přidáte/odeberete práva, stačí zavolat metodu forceReloadUserIdentity($userId) a dojde k obnovení identity, danné osoby. To samé v případě udělění banu.
+## TODO
+- sami si ověřte zda uživatel není blokovaný

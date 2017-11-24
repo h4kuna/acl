@@ -2,9 +2,9 @@
 
 namespace h4kuna\Acl\Security;
 
-use h4kuna\Acl\Test,
-	Nette\Security,
-	Tester\Assert;
+use h4kuna\Acl\Test;
+use Nette\Security;
+use Tester\Assert;
 
 $container = require __DIR__ . '/../../bootstrap.php';
 
@@ -29,15 +29,13 @@ class AuthenticatorTest extends \Tester\TestCase
 
 	protected function tearDown()
 	{
-		$this->user->logout(TRUE);
+		$this->user->logout(true);
 	}
 
 	public function testLoginById()
 	{
 		$user = $this->authenticator->loginById(1);
-		Assert::false(isset($user->getIdentity()->password));
-		Assert::false(isset($user->getIdentity()->block));
-		Assert::false(isset($user->getIdentity()->id));
+		Assert::same([], $user->getIdentity()->data);
 		Assert::same(1, $user->getId());
 		Assert::true($user->isLoggedIn());
 		Assert::same(2, $this->userModel->fetchUserById($user->getId())['login_count']);

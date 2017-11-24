@@ -7,7 +7,7 @@ abstract class Exception extends \Exception {}
 // Development exceptions
 class InvalidArgumentException extends Exception {}
 
-class MethodIsNotImplementedException extends Exception {}
+class MethodIsNotImplementedException extends \RuntimeException {}
 
 // Authenticator
 abstract class AuthenticatorException extends Exception {}

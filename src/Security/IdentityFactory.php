@@ -2,22 +2,19 @@
 
 namespace h4kuna\Acl\Security;
 
-use h4kuna\Acl;
+use Nette\Security\Identity;
 
 class IdentityFactory
 {
 
 	/**
-	 * @param AuthenticatorStructure $data
+	 * @param mixed $id
+	 * @param array|\ArrayAccess|null $data
 	 * @return Identity
-	 * @throws Acl\IdentityIsBlockedException
 	 */
-	public function create(AuthenticatorStructure $data)
+	public function create($id, $data = null)
 	{
-		if ($data->isBlocked()) {
-			throw new Acl\IdentityIsBlockedException($data->getId());
-		}
-		return new Identity($data);
+		return new Identity($id, null, $data);
 	}
 
 }
